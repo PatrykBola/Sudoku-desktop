@@ -82,15 +82,4 @@ public class GenerateLevel {
         }
     }
 
-    public static void main(String[] args) {
-        generateBoard(25);
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                System.out.print(sudokuNet[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
 }

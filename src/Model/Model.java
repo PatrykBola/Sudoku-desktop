@@ -6,8 +6,9 @@ public class Model {
 
     private GenerateLevel generateLevel = new GenerateLevel();
 
-    private int[][] sudokuNet;
-    public  void  setSudokuNet(int[][] sudokuArr){
+   public int[][] sudokuNet;
+
+    public void setSudokuNet(int[][] sudokuArr) {
         this.sudokuNet = sudokuArr;
     }
 

@@ -1,8 +1,5 @@
 package View;
-
-import Controller.Controller;
-
-public class View {
+public class View  {
     public void printNet(int[][] sudokuNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -12,7 +9,4 @@ public class View {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
 }

@@ -1,12 +1,9 @@
 package Model;
 
-import Controller.Controller;
-
 import java.io.*;
 
 public class FileService {
     private String filePath;
-    private String tempFilePath;
 
     public FileService() {
         this.filePath = "D:/git/SudokuApp/src/data.txt";
@@ -60,16 +57,6 @@ public class FileService {
         }
         return sudokuNet;
     }
-
-    public void printNet(int[][] sudokuNet) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                System.out.print(sudokuNet[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
 }
 
 
