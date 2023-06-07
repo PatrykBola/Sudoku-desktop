@@ -1,9 +1,6 @@
 package Model;
 
 import Model.Levels.GenerateLevel;
-import View.View;
-
-import java.util.ArrayList;
 
 public class Model {
 
@@ -18,9 +15,9 @@ public class Model {
         return sudokuNet[x][y];
     }
 
-    public boolean setValue(int x, int y, int digit) {
+    public boolean setValue(int x, int y, int digit, int[][] sudokuNet) {
         if (isValid(x, y, digit)) {
-            sudokuNet[x][y] = digit;
+            this.sudokuNet[x][y] = digit;
             return true;
         }
         return false;
@@ -50,10 +47,10 @@ public class Model {
         return true;
     }
 
-    public boolean isSolved() {
+    public boolean isSolved(int[][] sudokuNet) {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {
-                if (sudokuNet[x][y] == 0) {
+                if (this.sudokuNet[x][y] == 0) {
                     return false;
                 }
             }

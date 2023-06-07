@@ -7,14 +7,16 @@ import java.io.*;
 public class FileService {
     private String filePath;
     private String tempFilePath;
-    public FileService(){
-        this.filePath = "data.txt";
+
+    public FileService() {
+        this.filePath = "D:/git/SudokuApp/src/data.txt";
     }
-    public String getFilePath(){
+
+    public String getFilePath() {
         return this.filePath;
     }
 
-    public void save(int[][] sudokuNet){
+    public void save(int[][] sudokuNet) {
         try {
             PrintWriter writer = new PrintWriter("data.txt");
             for (int i = 0; i < sudokuNet.length; i++) {
@@ -29,6 +31,7 @@ public class FileService {
         }
         //truncate
     }
+
     public int[][] read(String filePath) {
         int[][] sudokuNet = new int[9][9];
         BufferedReader reader = null;
@@ -57,6 +60,7 @@ public class FileService {
         }
         return sudokuNet;
     }
+
     public void printNet(int[][] sudokuNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -66,9 +70,6 @@ public class FileService {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
 }
 
 
