@@ -7,6 +7,11 @@ public class Model {
     private GenerateLevel generateLevel = new GenerateLevel();
 
    public int[][] sudokuNet;
+   private String mainPath = generateLevel.getMainPath();
+
+    public String getMainPath() {
+        return mainPath;
+    }
 
     public void setSudokuNet(int[][] sudokuArr) {
         this.sudokuNet = sudokuArr;
