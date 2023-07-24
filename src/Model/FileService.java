@@ -3,19 +3,24 @@ package Model;
 import java.io.*;
 
 public class FileService {
-    private String filePath;
+    private String mainBoardPath;
+    private String compareBoardPath;
 
     public FileService() {
-        this.filePath = "D:/git/SudokuApp/src/data.txt";
+
+        this.mainBoardPath = "D:/git/SudokuApp/src/gameBoard.txt";
+        this.compareBoardPath = "D:/git/SudokuApp/src/boardToCompare.txt";
     }
 
-    public String getFilePath() {
-        return this.filePath;
+    public String getMainBoardPath() {
+        return this.mainBoardPath;
     }
+    public String getCompareBoardPath() {return this.compareBoardPath;}
 
-    public void save(int[][] sudokuNet) {
+
+    public void save(int[][] sudokuNet, String filePath) {
         try {
-            PrintWriter writer = new PrintWriter("data.txt");
+            PrintWriter writer = new PrintWriter(filePath);
             for (int i = 0; i < sudokuNet.length; i++) {
                 for (int j = 0; j < sudokuNet[i].length; j++) {
                     writer.print(sudokuNet[i][j]);

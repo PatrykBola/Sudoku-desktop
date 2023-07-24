@@ -56,10 +56,9 @@ public class View extends JFrame {
             }
         }
 
-        String filePath = "D:/git/SudokuApp/src/data.txt";
+        String filePath = "D:/git/SudokuApp/src/gameBoard.txt";
         int[][] sudokuNet = fileService.read(filePath);
         loadArray(sudokuNet);
-
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
