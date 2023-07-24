@@ -9,16 +9,21 @@ import java.util.Random;
 
 public class GenerateLevel {
     FileService fileService = new FileService();
+    private String mainPath = fileService.getCompareBoardPath();
+
+    public String getMainPath() {
+        return mainPath;
+    }
 
     private static int[][] sudokuNet = new int[9][9];
 
-    public static void generateBoard(int emptyCells) {
-        fillBoard();
+    public static void generateBoard(int emptyCells,int[][] sudokuNet,String mainPath, FileService fileService) {
+        fillBoard(sudokuNet,mainPath, fileService);
         removeCells(emptyCells);
     }
 
 
-    private static void fillBoard() {
+    private static void fillBoard(int[][] sudokuNet,String mainPath,FileService fileService) {
         Random random = new Random();
         List<Integer> numbers = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
@@ -26,6 +31,7 @@ public class GenerateLevel {
         }
         Collections.shuffle(numbers);
         generateBoardRek(0, 0, random, numbers);
+        fileService.save(sudokuNet,mainPath);
     }
 
     private static boolean generateBoardRek(int x, int y, Random random, List<Integer> numbers) {
