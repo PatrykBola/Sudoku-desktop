@@ -8,10 +8,17 @@ import Model.FileService;
 import java.util.Scanner;
 
 public class Controller {
-    private Model model = new Model();
-    private View view = new View();
+    private Model model;
+    private View view ;
     private FileService fileService = new FileService();
     Scanner scanner = new Scanner(System.in);
+    public Controller(){
+        model = new Model();
+        view = new View(model);
+    }
+    public int[][] loadSudokuFromFile() {
+        return fileService.read(fileService.getFilePath());
+    }
     public void play() {
 
         GenerateLevel.generateBoard(25);
@@ -21,7 +28,7 @@ public class Controller {
         if (!model.isSolved(sudokuNet)) {
             while (!model.isSolved(sudokuNet)) {
                 fileService.read(fileService.getFilePath());
-                view.printNet(sudokuNet);
+//                view.printNet(sudokuNet);
                 System.out.print("Enter X: ");
                 int y = scanner.nextInt() - 1;
                 System.out.print("Enter Y: ");
