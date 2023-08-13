@@ -3,14 +3,19 @@ package Model;
 import java.io.*;
 
 public class FileService {
-    private String mainBoardPath;
-    private String compareBoardPath;
+//    Model model = new Model();
+    private final String mainBoardPath= "D:/git/SudokuApp/src/gameBoard.txt";
+    private final String compareBoardPath= "D:/git/SudokuApp/src/boardToCompare.txt";
+    private int[][] sudokuNet = new int[9][9];
 
-    public FileService() {
-
-        this.mainBoardPath = "D:/git/SudokuApp/src/gameBoard.txt";
-        this.compareBoardPath = "D:/git/SudokuApp/src/boardToCompare.txt";
+    public int[][] getSudokuNet() {
+        return sudokuNet;
     }
+//    public FileService() {
+//
+//        this.mainBoardPath ;
+//        this.compareBoardPath ;
+//    }
 
     public String getMainBoardPath() {
         return this.mainBoardPath;
@@ -18,6 +23,16 @@ public class FileService {
     public String getCompareBoardPath() {return this.compareBoardPath;}
 
 
+//    public void save(String filePath) {
+//        try {
+//            PrintWriter writer = new PrintWriter(filePath);
+//            writer.println("Ala MA KOTA");
+//            writer.close();
+//        } catch (IOException e) {
+//            System.out.println("Error");
+//        }
+//        //truncate
+//    }
     public void save(int[][] sudokuNet, String filePath) {
         try {
             PrintWriter writer = new PrintWriter(filePath);

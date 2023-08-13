@@ -4,13 +4,24 @@ import Model.Levels.GenerateLevel;
 
 public class Model {
 
-    private GenerateLevel generateLevel = new GenerateLevel();
+//    private GenerateLevel generateLevel;
+    private FileService fileService = new FileService();
+    private int[][] sudokuNet = fileService.read(fileService.getMainBoardPath());
 
-   public int[][] sudokuNet;
-   private String mainPath = generateLevel.getMainPath();
+    public Model() {
+//        generateLevel = new GenerateLevel();
+        fileService = new FileService();
+    }
+
+//   public int[][] sudokuNet;
+//   private String mainPath = fileService.getMainBoardPath();
 
     public String getMainPath() {
-        return mainPath;
+        return fileService.getMainBoardPath();
+    }
+
+    public int[][] getSudokuNet() {
+        return sudokuNet;
     }
 
     public void setSudokuNet(int[][] sudokuArr) {
