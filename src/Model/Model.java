@@ -1,24 +1,21 @@
 package Model;
 
 import Model.Levels.GenerateLevel;
+import View.View;
+
+import javax.swing.*;
+import java.io.File;
 
 public class Model {
-
-//    private GenerateLevel generateLevel;
-    private FileService fileService = new FileService();
+    public FileService fileService = new FileService();
     private int[][] sudokuNet = fileService.read(fileService.getMainBoardPath());
-
-    public Model() {
-//        generateLevel = new GenerateLevel();
-        fileService = new FileService();
+    public Model(){
+        FileService fileService = new FileService();
+         int[][] sudokuNet = fileService.read(fileService.getMainBoardPath());
     }
+//    private FileService fileService = new FileService();
 
-//   public int[][] sudokuNet;
-//   private String mainPath = fileService.getMainBoardPath();
-
-    public String getMainPath() {
-        return fileService.getMainBoardPath();
-    }
+//    private JTextField[][] sudokuFields =
 
     public int[][] getSudokuNet() {
         return sudokuNet;
@@ -32,12 +29,14 @@ public class Model {
         return sudokuNet[x][y];
     }
 
-    public boolean setValue(int x, int y, int digit, int[][] sudokuNet) {
-        if (isValid(x, y, digit)) {
-            this.sudokuNet[x][y] = digit;
-            return true;
-        }
-        return false;
+    public boolean setValue(int x, int y, int digit) {
+        this.sudokuNet[x][y] = digit;
+//        if (isValid(x, y, digit)) {
+//            this.sudokuNet[x][y] = digit;
+//            fileService.save(this.sudokuNet, fileService.getMainBoardPath()); // Zapis do pliku po ustawieniu wartości
+//            return true;
+//        }
+        return true;
     }
 
     public boolean isValid(int x, int y, int digit) {
