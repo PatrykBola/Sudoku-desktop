@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class GenerateLevel {
     FileService fileService = new FileService();
-    Model model = new Model();
+//    Model model = new Model();
     String mainPath = fileService.getMainBoardPath();
     String comparePath = fileService.getCompareBoardPath();
 //    private String mainPath = fileService.getMainBoardPath();

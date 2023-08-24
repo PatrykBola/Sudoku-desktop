@@ -1,14 +1,13 @@
 import Controller.Controller;
-
-import javax.swing.*;
-import java.io.IOException;
+import Model.Model;
+import View.View;
 
 public class Main {
-    private static Controller controller;
 
     public static void main(String[] args) {
-
         new Controller().play();
-
     }
 }
+    //TODO:Usunięcie Zer do jednej planszy
+    //TODO:Action Listenery z View do Controllera
+    //TODO:Osługa input w zakresie 1-9;

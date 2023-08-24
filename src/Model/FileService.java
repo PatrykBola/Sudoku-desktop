@@ -3,7 +3,6 @@ package Model;
 import java.io.*;
 
 public class FileService {
-//    Model model = new Model();
     private final String mainBoardPath= "D:/git/SudokuApp/src/gameBoard.txt";
     private final String compareBoardPath= "D:/git/SudokuApp/src/boardToCompare.txt";
     private int[][] sudokuNet = new int[9][9];
@@ -11,28 +10,11 @@ public class FileService {
     public int[][] getSudokuNet() {
         return sudokuNet;
     }
-//    public FileService() {
-//
-//        this.mainBoardPath ;
-//        this.compareBoardPath ;
-//    }
 
     public String getMainBoardPath() {
         return this.mainBoardPath;
     }
     public String getCompareBoardPath() {return this.compareBoardPath;}
-
-
-//    public void save(String filePath) {
-//        try {
-//            PrintWriter writer = new PrintWriter(filePath);
-//            writer.println("Ala MA KOTA");
-//            writer.close();
-//        } catch (IOException e) {
-//            System.out.println("Error");
-//        }
-//        //truncate
-//    }
     public void save(int[][] sudokuNet, String filePath) {
         try {
             PrintWriter writer = new PrintWriter(filePath);
@@ -50,7 +32,7 @@ public class FileService {
     }
 
     public int[][] read(String filePath) {
-        int[][] sudokuNet = new int[9][9];
+//        int[][] sudokuNet = new int[9][9];
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(filePath));
