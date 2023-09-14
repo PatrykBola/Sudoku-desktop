@@ -35,8 +35,8 @@ public class FileService {
         //truncate
     }
 
-    public int[][] read(String filePath) {
-        int[][] sudokuNet = new int[9][9];
+    public int[][] read(int[][] arrayBoard, String filePath) {
+//        int[][] arrayBoard = new int[9][9];
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(filePath));
@@ -45,7 +45,7 @@ public class FileService {
             while (line != null && x < 9) {
                 String[] parts = line.split("");
                 for (int i = 0; i < parts.length; i++) {
-                    sudokuNet[x][i] = Integer.parseInt(parts[i]);
+                    arrayBoard[x][i] = Integer.parseInt(parts[i]);
                 }
                 x++;
                 line = reader.readLine();
@@ -61,7 +61,7 @@ public class FileService {
                 e.printStackTrace();
             }
         }
-        return sudokuNet;
+        return arrayBoard;
     }
 }
 

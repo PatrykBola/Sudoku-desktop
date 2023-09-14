@@ -45,6 +45,16 @@ public class View extends JFrame {
 
     }
 
+    public void changingDefaultFieldsColor(int[][] reloadNet, JTextField[][] sudokuFields){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (reloadNet[i][j] != 0){
+                    sudokuFields[i][j].setBackground(defaultFieldColor);
+                }
+            }
+        }
+    }
+
     public void creatingFields(JTextField[][] sudokuFields){
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -161,6 +171,8 @@ public class View extends JFrame {
         return defaultBackgroundColor;
     }
 
+    public Color getDefaultFieldColor() {return defaultFieldColor;}
+
     public Color getSelectedBackgroundColor() {
         return selectedBackgroundColor;
     }
@@ -171,13 +183,13 @@ public class View extends JFrame {
     public void setSelectedRow(int selectedRow) {
         this.selectedRow = selectedRow;
     }
-
     public void setSelectedCol(int selectedCol) {
         this.selectedCol = selectedCol;
     }
 
     private Color defaultBackgroundColor = Color.WHITE; // Domyślny kolor tła
-    private Color selectedBackgroundColor = new Color(43, 140, 215); // Kolor tła dla zaznaczonego pola
+    private Color selectedBackgroundColor = new Color(152, 188, 151);
+    private Color defaultFieldColor = new Color(34, 198, 32);// Kolor tła dla zaznaczonego pola
 
     public void addReloadButtonActionListener(ActionListener listener) {
         reloadButton.addActionListener(listener);
