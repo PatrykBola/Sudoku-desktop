@@ -6,144 +6,139 @@ import View.View;
 import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Controller {
     private Model model = new Model();
-    private View view = new View(model);
-
-
-//    private FileService fileService = new FileService();
-//    private GenerateLevel generateLevel = new GenerateLevel();
-//    JTextField[][] sudokuFields = new JTextField[9][9];
-//    int[][] sudokuNet = fileService.read(fileService.getMainBoardPath());
+    private View view = new View();
+    int[][] sudokuNet;
+    JTextField[][] sudokuFields = new JTextField[9][9];
 
     public void play() {
-//        int[][] sudokuNet = model.getSudokuNet();
+        this.sudokuNet = model.readSudokuNetFromFile();
+        view.creatingFields(sudokuFields);
+        model.loadIntArrayToJTextFieldArray(sudokuNet,sudokuFields);
+        view.creatingGui();
+        attachListenersToSudokuFields(sudokuFields);
+
+
+
+
 //        view.printNet(sudokuNet);
-        attachListenersToSudokuFields();
+        //TODO:Naprawic generowanie !
+        //TODO:1.wygenerowanie zapisanie do tymczasowej tablicy i dopiero wygenerowana zapisac do pliku a w modelu czytac z pliku do oryg. sudokuNet
+        //TODO:Naprawic generowanie !
+        //TODO:Naprawic generowanie !
+//        System.out.println("********************");
 
-    }
-//    public Controller() {
-//        this.model = new Model();
-//        this.view = new View(model);
-//        this.sudokuFields = view.getSudokuFields();
-////        attachListenersToSudokuFields();
-////        model = new Model();
-////        view = new View(model);
-////        fileService = new FileService();
+//        view.printNet(model.getSudokuNet());
+//        attachListenersToSudokuFields();
 
-////        JTextField[][] sudokuFields = view.getSudokuFields();
+//        view.addReloadButtonActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
 //
-//    }
-    private void attachListenersToSudokuFields() {
+//                model.fileService.read(model.fileService.getBoardToReload());
+//
+//            }
+//        });
+//
+//        view.addNewGameButtonActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//              model.newGameButton();`
+//            }
+//        });
+    }
+    public void attachListenersToSudokuFields(JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 final int row = i;
                 final int col = j;
 
-                JTextField[][] sudokuFields = view.getSudokuFields();
-                sudokuFields[i][j].addFocusListener(new FocusAdapter() {
+                sudokuFields[i][j].addKeyListener(new KeyAdapter() {
                     @Override
-                    public void focusGained(FocusEvent e) {
-                        sudokuFields[row][col].setBackground(view.getSelectedBackgroundColor());
-                        view.setSelectedRow(row);
-                        view.setSelectedCol(col);
-                    }
-
-                    @Override
-                    public void focusLost(FocusEvent e) {
+                    public void keyTyped(KeyEvent e) {
                         JTextField source = (JTextField) e.getSource();
-                        String input = source.getText();
+                        char typedChar = e.getKeyChar();
 
-                        try {
-                            int value = Integer.parseInt(input);
-                            model.setValue(row, col, value);
-                            model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
-//                            view.printNet(model.getSudokuNet());
-                        } catch (NumberFormatException ex) {
-                            // Obsłuż niepoprawny format wprowadzonych danych
+                        if (Character.isDigit(typedChar)) {
+                            source.setText(String.valueOf(typedChar));
+                            source.setBackground(view.getSelectedBackgroundColor());
+                            source.getCaret().setVisible(false);
+                            e.consume(); // Konsumuj zdarzenie, aby uniknąć dodatkowego wprowadzania tekstu
+                            handleInput(row, col, typedChar,source); // Obsługa wprowadzonej cyfry
                         }
-                        sudokuFields[row][col].setBackground(view.getDefaultBackgroundColor());
                     }
                 });
             }
         }
     }
-//    public void play() {
-////        String filePath = "D:/git/SudokuApp/src/gameBoard.txt";
-//
-////        fileService.loadArray(sudokuNet);
-//        int[][] sudokuNet = model.getSudokuNet();
-//        view.printNet(sudokuNet);
-//        view.printFields();
-//        attachListenersToSudokuFields();
-//        if (!model.isSolved(model.getSudokuNet())){
-//            generateLevel.generateBoard(40, fileService.getSudokuNet());
-//        }
 
-
+    private void handleInput(int row, int col, char typedChar,JTextField source) {
+        try {
+            source.setBackground(view.getDefaultBackgroundColor());
+            int value = Integer.parseInt(String.valueOf(typedChar));
+            model.setValue(row, col, value);
+            model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
+            view.printNet(model.getSudokuNet());
+        } catch (NumberFormatException ex) {
+            // Obsłuż niepoprawny format wprowadzonych danych
+        }
+    }
+//    public void attachListenersToSudokuFields(JTextField[][] sudokuFields) {
 //        for (int i = 0; i < 9; i++) {
 //            for (int j = 0; j < 9; j++) {
-//                sudokuFields[i][j] = view.sudokuField();
-//                sudokuFields[i][j].setBounds(view.getMARGIN_LEFT() + j * view.getCELL_SIZE(), view.getMARGIN_TOP() + i * view.getCELL_SIZE(), view.getCELL_SIZE(), view.getCELL_SIZE());
-//                add(sudokuFields[i][j]);
-//
 //                final int row = i;
 //                final int col = j;
 //                sudokuFields[i][j].addFocusListener(new FocusAdapter() {
-//                    @Override
-//                    public void focusGained(FocusEvent e) {
-//                        view.getSudokuFields()[row][col].setBackground(view.getSelectedBackgroundColor());
-//                        view.selectedRow = row;
-//                        view.selectedCol = col;
-//                        System.out.println(row);
-//                        System.out.println(col);
-//                    }
-//                    @Override
-//                    public void focusLost(FocusEvent e) {
-//                        JTextField source = (JTextField) e.getSource();
-//                        String input = source.getText();
+//                                                        @Override
+//                                                        public void focusGained(FocusEvent e) {
+//                                                            JTextField source = (JTextField) e.getSource();
+//                                                            source.setBackground(view.getSelectedBackgroundColor());
+//                                                            view.setSelectedRow(row);
+//                                                            view.setSelectedCol(col);
+//                                                                System.out.println(row);
+//                                                            source.getCaret().setVisible(false);
+//                                                            source.setText("");
 //
-//                        try {
-//                            int value = Integer.parseInt(input);
-//                            System.out.println(input);
-//                            model.setValue(row, col, value);
-//                            fileService.save(model.getSudokuNet(), fileService.getMainBoardPath());
-//                            view.printNet(model.getSudokuNet());
-//                        } catch (NumberFormatException ex) {
-//                            //TODO:na if`ach
-//                        }
-//                        sudokuFields[row][col].setBackground(view.getDefaultBackgroundColor());
-//                    }
-//                });
-//            }
-//        }
-
-
-//        fileService.read(model.getMainPath());
-//        int[][] sudokuNet = fileService.read(model.getMainPath());
-//        if (model.isSolved(sudokuNet)) {
-
-//            model.setSudokuNet(sudokuNet);
-//        }
-
-
-//        if (!model.isSolved(sudokuNet)) {
-//            while (!model.isSolved(sudokuNet)) {
-//                fileService.read(fileService.getMainBoardPath());
-////                view.printNet(sudokuNet);
-////                System.out.print("Enter X: ");
-////                int y = scanner.nextInt() - 1;
-////                System.out.print("Enter Y: ");
-////                int x = scanner.nextInt() - 1;
-////                System.out.print("Enter Digit: ");
-////                int digit = scanner.nextInt();
-////                model.setValue(x, y, digit, sudokuNet);
-//                fileService.save(sudokuNet, fileService.getMainBoardPath());
+//                                                            if (!source.getText().equals("")){
+//
+//                                                            }
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void focusLost(FocusEvent e) {
+//                                                            JTextField source = (JTextField) e.getSource();
+//                                                            String input = source.getText();
+//                                                                 System.out.println("a");
+//                                                            try {
+//                                                                    System.out.println("b");
+//                                                                int value = Integer.parseInt(input);
+//                                                                model.setValue(row, col, value);
+//                                                                    System.out.println("c");
+//                                                                model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
+//                                                                view.printNet(model.getSudokuNet());
+//                                                            } catch (NumberFormatException ex) {
+//                                                                // Obsłuż niepoprawny format wprowadzonych danych
+//                                                            }
+//                                                            source.setBackground(view.getDefaultBackgroundColor());
+//                                                            source.getCaret().setVisible(false);
+//
+//                                                        }
+//                                                    }
+//
+//                );
+//
 //            }
 //        }
 //    }
-    }
+}
+
+
+
+
 
 
 
