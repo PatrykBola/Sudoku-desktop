@@ -151,6 +151,16 @@ public class View extends JFrame {
         return field;
     }
 
+//    public JTextField finalSudokuField(int[][] reloadNet, JTextField[][] sudokuFields){
+//        JTextField field = new JTextField();
+//        field.setFont(new Font("Times New Roman", Font.BOLD, 14));
+//        field.setHorizontalAlignment(JTextField.CENTER);
+//        field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//        final field.setBackground(defaultFieldColor);
+//
+//        return field;
+//    }
+
     public void printFields() {
         int windowWidth = CELL_SIZE * 9 + (SUBGRID_SIZE * 2) + MARGIN_LEFT + MARGIN_RIGHT;
         int windowHeight = CELL_SIZE * 9 + (SUBGRID_SIZE * 2) + MARGIN_TOP + MARGIN_BOTTOM;

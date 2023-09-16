@@ -9,6 +9,7 @@ public class Model {
     public GenerateLevel generateLevel = new GenerateLevel();
     private int[][] sudokuNet = new int[9][9];
     private int[][] reloadNet = new int[9][9];
+    private int[][] compareNet = new int[9][9];
     private int[][] defaultColorField = new int[9][9];
     private JTextField[][] sudokuFields = new JTextField[9][9];
 
@@ -20,6 +21,11 @@ public class Model {
     }
     public int[][] getReloadNet() {
         return reloadNet;
+    }
+
+    public int[][] readCompareBoard(){
+        this.compareNet = fileService.read(compareNet, fileService.getCompareBoardPath());
+        return compareNet;
     }
 
 
