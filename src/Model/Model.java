@@ -7,31 +7,45 @@ import javax.swing.*;
 public class Model {
     public FileService fileService = new FileService();
     public GenerateLevel generateLevel = new GenerateLevel();
-    public int[][] sudokuNet;
-    JTextField[][] sudokuFields = new JTextField[9][9];
+    private int[][] sudokuNet = new int[9][9];
+    private int[][] reloadNet = new int[9][9];
+    private int[][] compareNet = new int[9][9];
+    private int[][] defaultColorField = new int[9][9];
+    private JTextField[][] sudokuFields = new JTextField[9][9];
 
-    public int[][] readSudokuNetFromFile(){
-        this.sudokuNet = fileService.read(fileService.getMainBoardPath());
-        return sudokuNet;
+
+
+    public int[][] readReloadBoard(){
+        this.reloadNet = fileService.read(reloadNet,fileService.getBoardToReload());
+        return reloadNet;
+    }
+    public int[][] getReloadNet() {
+        return reloadNet;
+    }
+
+    public int[][] readCompareBoard(){
+        this.compareNet = fileService.read(compareNet, fileService.getCompareBoardPath());
+        return compareNet;
     }
 
 
-//    public JTextField sudokuField() {
-//        JTextField field = new JTextField();
-//        field.setFont(new Font("Times New Roman", Font.BOLD, 14));
-//        field.setHorizontalAlignment(JTextField.CENTER);
-//        field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-//
-//        return field;
-//    }
 
-//    public void creatingField(){
+
+//    public int[][] colorFields(int[][] reloadNet,int[][] defaultColorField){
 //        for (int i = 0; i < 9; i++) {
 //            for (int j = 0; j < 9; j++) {
-//                sudokuFields[i][j] = sudokuField();
+//                if (reloadNet[i][j] == 0){
+//                    defaultColorField[i][j] = 1;
+//                }
+//                else defaultColorField[i][j] = 0;
 //            }
 //        }
+//        return defaultColorField;
 //    }
+    public int[][] readSudokuNetFromFile(){
+        this.sudokuNet = fileService.read(sudokuNet,fileService.getMainBoardPath());
+        return sudokuNet;
+    }
     public void updateSudokuFields(int[][] sudokuNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
