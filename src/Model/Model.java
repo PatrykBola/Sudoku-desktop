@@ -28,6 +28,15 @@ public class Model {
         return compareNet;
     }
 
+    public int[][] reloadBoard(int[][] oldBoard, int[][] newBoard){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                oldBoard[i][j] = newBoard[i][j];
+            }
+        }
+        return newBoard;
+    }
+
 
 
 
