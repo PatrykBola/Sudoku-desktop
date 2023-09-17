@@ -5,10 +5,7 @@ import View.View;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class Controller {
     private Model model = new Model();
@@ -29,21 +26,20 @@ public class Controller {
 
 
         System.out.println(reloadNet[0][0]);
-//        view.shortInfo("Co to");
         System.out.println(reloadNet[8][8]);
 
         attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet);
 
 
-//
-//        view.addReloadButtonActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//                model.fileService.read(model.fileService.getBoardToReload());
-//
-//            }
-//        });
+
+        view.addReloadButtonActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.reloadBoard(sudokuNet, reloadNet);
+                view.updateSudokuFields(sudokuNet,sudokuFields);
+                attachListenersToSudokuFields(sudokuFields,reloadNet,compareNet);
+            }
+        });
 //
 //        view.addNewGameButtonActionListener(new ActionListener() {
 //            @Override

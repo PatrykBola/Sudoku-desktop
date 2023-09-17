@@ -70,17 +70,18 @@ public class View extends JFrame {
         }
     }
 
-//    public void updateSudokuFields(int[][] sudokuNet) {
-//        for (int i = 0; i < 9; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                if (sudokuNet[i][j] != 0) {
-//                    sudokuFields[i][j].setText(String.valueOf(sudokuNet[i][j]));
-//                } else {
-//                    sudokuFields[i][j].setText(" ");
-//                }
-//            }
-//        }
-//    }
+    public JTextField[][] updateSudokuFields(int[][] sudokuNet, JTextField[][] sudokuFields) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (sudokuNet[i][j] != 0) {
+                    sudokuFields[i][j].setText(String.valueOf(sudokuNet[i][j]));
+                } else {
+                    sudokuFields[i][j].setText(" ");
+                }
+            }
+        }
+        return sudokuFields;
+    }
 
     public Label shortInfo(String info) throws InterruptedException {
         Timer timer = new Timer(2000, new ActionListener() {
