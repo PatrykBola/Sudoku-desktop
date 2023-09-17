@@ -18,7 +18,7 @@ public class Controller {
     private int[][] compareNet;
     private JTextField[][] sudokuFields = new JTextField[9][9];
 
-    public void play() {
+    public void play() throws InterruptedException {
         this.sudokuNet = model.readSudokuNetFromFile();
         this.reloadNet = model.readReloadBoard();
         this.compareNet = model.readCompareBoard();
@@ -29,6 +29,7 @@ public class Controller {
 
 
         System.out.println(reloadNet[0][0]);
+//        view.shortInfo("Co to");
         System.out.println(reloadNet[8][8]);
 
         attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet);
@@ -76,10 +77,17 @@ public class Controller {
                             try {
 //                                System.out.println("b");
                                 int value = Integer.parseInt(input);
+
+                                        if (value == 1){
+                                            view.shortInfo("Wrong");
+                                        }
+
                                 model.setValue(row, col, value);
 //                                System.out.println("c");
                                 view.printNet(model.getSudokuNet());
                             } catch (NumberFormatException ex) {
+                            } catch (InterruptedException ex) {
+                                throw new RuntimeException(ex);
                             }
                             source.setBackground(view.getDefaultBackgroundColor());
                         }
@@ -106,6 +114,7 @@ public class Controller {
                                 source.setBackground(view.getSelectedBackgroundColor());
                                 source.getCaret().setVisible(false);
                                 e.consume();
+
                                 model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
                                 source.setBackground(view.getDefaultBackgroundColor());
                                 source.setEditable(false);
