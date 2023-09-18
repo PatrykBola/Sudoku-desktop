@@ -1,7 +1,6 @@
 package Model.Levels;
 
 import Model.FileService;
-import Model.Model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,38 +27,46 @@ public class GenerateLevel {
 
 //    private Model model;
 //    int[][] sudokuNet = model.getSudokuNet();
-
-    public int[][] generateBoard(int emptyCells, int[][] array) {
-        int[][] tempArray = new int[9][9];
-        fillBoard(tempArray);
-        fileService.save(tempArray, fileService.getCompareBoardPath());
-        removeCells(emptyCells, tempArray);
-        fileService.save(tempArray, fileService.getMainBoardPath());
-        fileService.save(tempArray, fileService.getBoardToReload());
-
+    public int[][] resetBoards (int[][] sudokuNet){
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                array[i] = tempArray[i];
+                sudokuNet[i][j] = 0;
             }
         }
-           return array;
+        return sudokuNet;
+    }
+
+    public int[][] generateBoard(int emptyCells, int[][] sudokuNet, int[][] reloadNet, int[][] compareBoard) {
+//        int[][] tempArray = new int[9][9];
+        fillBoard(sudokuNet);
+        fileService.save(sudokuNet, fileService.getCompareBoardPath());
+        removeCells(emptyCells, sudokuNet);
+        fileService.save(sudokuNet, fileService.getMainBoardPath());
+        fileService.save(sudokuNet, fileService.getBoardToReload());
+
+//        for (int i = 0; i < 9; i++) {
+//            for (int j = 0; j < 9; j++) {
+//                array[i] = tempArray[i];
+//            }
+//        }
+           return sudokuNet;
 
     }
 
-    public void fillBoard(int[][] tempArray ) {
+    public void fillBoard(int[][] sudokuNet ) {
         Random random = new Random();
         List<Integer> numbers = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             numbers.add(i);
         }
         Collections.shuffle(numbers);
-        generateBoardRek(0, 0, random, numbers, tempArray);
-        fileService.save(tempArray, fileService.getCompareBoardPath());
+        generateBoardRek(0, 0, random, numbers, sudokuNet);
+//        fileService.save(sudokuNet, fileService.getCompareBoardPath());
 //        fileService.save(sudokuNet, fileService.getMainBoardPath());
 //        return sudokuNet;
     }
 
-    private  boolean generateBoardRek(int x, int y, Random random, List<Integer> numbers, int[][] tempArray) {
+    private  boolean generateBoardRek(int x, int y, Random random, List<Integer> numbers, int[][] sudokuNet) {
         if (y == 9) {
             y = 0;
             x++;
@@ -74,9 +81,9 @@ public class GenerateLevel {
         for (int i = 0; i < 9; i++) {
 //            System.out.println(sudokuNet[i][i]);
             int number = numbers.get(i);
-            if (existInBoard(number, x, y, boxX, boxY, tempArray)) {
-                tempArray[x][y] = number;
-                if (generateBoardRek(x, y + 1, random, numbers,tempArray)) {
+            if (existInBoard(number, x, y, boxX, boxY, sudokuNet)) {
+                sudokuNet[x][y] = number;
+                if (generateBoardRek(x, y + 1, random, numbers, sudokuNet)) {
                     return true;
                 }
             }
@@ -85,20 +92,20 @@ public class GenerateLevel {
 
 
 //
-        tempArray[x][y] = 0; // cofnięcie wyboru liczby
+        sudokuNet[x][y] = 0; // cofnięcie wyboru liczby
         return false;
     }
 
-    private  boolean existInBoard(int number, int row, int col, int boxX, int boxY, int[][] tempArray) {
+    private  boolean existInBoard(int number, int row, int col, int boxX, int boxY, int[][] sudokuNet) {
         for (int i = 0; i < 9; i++) {
-            if (tempArray[row][i] == number || tempArray[i][col] == number) {
+            if (sudokuNet[row][i] == number || sudokuNet[i][col] == number) {
                 return false;
             }
         }
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (tempArray[boxX + i][boxY + j] == number) {
+                if (sudokuNet[boxX + i][boxY + j] == number) {
                     return false;
                 }
             }
@@ -107,13 +114,13 @@ public class GenerateLevel {
         return true;
     }
 
-    private  void removeCells(int toRemove, int[][] tempArray) {
+    private  void removeCells(int toRemove, int[][] sudokuNet) {
         Random random = new Random();
         for (int i = 0; i < toRemove; i++) {
             int x = random.nextInt(9);
             int y = random.nextInt(9);
-            if (tempArray[x][y] != 0) {
-                tempArray[x][y] = 0;
+            if (sudokuNet[x][y] != 0) {
+                sudokuNet[x][y] = 0;
             } else {
                 i--;
             }

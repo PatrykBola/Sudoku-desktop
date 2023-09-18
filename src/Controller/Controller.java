@@ -31,22 +31,28 @@ public class Controller {
         attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet);
 
 
-
         view.addReloadButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.reloadBoard(sudokuNet, reloadNet);
-                view.updateSudokuFields(sudokuNet,sudokuFields);
-                attachListenersToSudokuFields(sudokuFields,reloadNet,compareNet);
+                view.updateSudokuFields(sudokuNet, sudokuFields);
+                attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet);
             }
         });
 //
-//        view.addNewGameButtonActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//              model.newGameButton();`
-//            }
-//        });
+        view.addNewGameButtonActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.cleanBoards(sudokuNet, reloadNet, compareNet);
+                model.generateNewBoard(sudokuNet);
+                view.updateSudokuFields(sudokuNet, sudokuFields);
+                model.readReloadBoard();
+                model.readCompareBoard();
+                view.reloadingDefaultFieldsColor(reloadNet, sudokuFields);
+                view.changingDefaultFieldsColor(reloadNet, sudokuFields);
+                attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet);
+            }
+        });
     }
 
     public void attachListenersToSudokuFields(JTextField[][] sudokuFields, int[][] reloadNet, int[][] compareNet) {
@@ -74,9 +80,9 @@ public class Controller {
 //                                System.out.println("b");
                                 int value = Integer.parseInt(input);
 
-                                        if (value == 1){
-                                            view.shortInfo("Wrong");
-                                        }
+                                if (value == 1) {
+                                    view.shortInfo("Wrong");
+                                }
 
                                 model.setValue(row, col, value);
 //                                System.out.println("c");
@@ -114,11 +120,15 @@ public class Controller {
                                 model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
                                 source.setBackground(view.getDefaultBackgroundColor());
                                 source.setEditable(false);
+                                String val = Character.toString(typedChar);
+                                int value = Integer.parseInt(val);
+                                model.setValue(row,col,value);
                                 Component nextComponent = getNextComponent(sudokuFields, reloadNet);
                                 if (nextComponent != null) {
                                     nextComponent.requestFocusInWindow();
                                 }
 
+                                model.fileService.save(model.getSudokuNet(),model.fileService.getMainBoardPath());
                             }
 
                         }
@@ -132,6 +142,7 @@ public class Controller {
             }
         }
     }
+
     private Component getNextComponent(JTextField[][] sudokuFields, int[][] reloadNet) {
         //TODO: Na komponent ktory jest nullem !
         for (int i = 0; i < 9; i++) {

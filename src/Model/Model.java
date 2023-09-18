@@ -13,7 +13,19 @@ public class Model {
     private int[][] defaultColorField = new int[9][9];
     private JTextField[][] sudokuFields = new JTextField[9][9];
 
-
+    public void cleanBoards(int[][] sudokuNet, int[][] reloadNet, int[][] compareNet){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                sudokuNet[i][j] = 0;
+                reloadNet[i][j] = 0;
+                compareNet[i][j] = 0;
+            }
+        }
+    }
+    public int[][] generateNewBoard (int[][] sudokuNet){
+        generateLevel.generateBoard(30,sudokuNet, reloadNet,compareNet);
+        return sudokuNet;
+    }
 
     public int[][] readReloadBoard(){
         this.reloadNet = fileService.read(reloadNet,fileService.getBoardToReload());
@@ -77,21 +89,21 @@ public class Model {
             }
         }
     }
-       public void newGameButton(){
-//        creatingFields();
-//        loadIntArrayToJTextFieldArray(sudokuNet);
-           generateLevel.generateBoard(30,sudokuNet);
-           updateSudokuFields(sudokuNet);
-           System.out.println(sudokuNet[1][1]);
-
-           for (int i = 0; i < 9; i++) {
-               for (int j = 0; j < 9; j++) {
-                   System.out.print(sudokuNet[i][j] + " ");
-               }
-               System.out.println();
-           }
-           System.out.println(getValue(0,0));
-       }
+//       public void newGameButton(){
+////        creatingFields();
+////        loadIntArrayToJTextFieldArray(sudokuNet);
+//           generateLevel.generateBoard(30,sudokuNet,reloadNet,compareNet);
+//           updateSudokuFields(sudokuNet);
+//           System.out.println(sudokuNet[1][1]);
+//
+//           for (int i = 0; i < 9; i++) {
+//               for (int j = 0; j < 9; j++) {
+//                   System.out.print(sudokuNet[i][j] + " ");
+//               }
+//               System.out.println();
+//           }
+//           System.out.println(getValue(0,0));
+//       }
 
         public int[][] getSudokuNet () {
             return sudokuNet;
