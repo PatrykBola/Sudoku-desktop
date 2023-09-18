@@ -59,6 +59,14 @@ public class View extends JFrame {
             }
         }
     }
+    public void reloadingDefaultFieldsColor(int[][] reloadNet,JTextField[][] sudokuFields){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                sudokuFields[i][j].setBackground(defaultBackgroundColor);
+            }
+        }
+    }
+
 
     public void creatingFields(JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
