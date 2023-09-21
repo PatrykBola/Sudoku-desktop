@@ -3,6 +3,8 @@ package Model;
 import Model.Levels.GenerateLevel;
 
 import javax.swing.*;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyListener;
 
 public class Model {
     public FileService fileService = new FileService();
@@ -13,6 +15,52 @@ public class Model {
     private int[][] defaultColorField = new int[9][9];
     private JTextField[][] sudokuFields = new JTextField[9][9];
 
+
+    public void removeListenersFromSudokuFields(JTextField[][] sudokuFields) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                JTextField field = sudokuFields[i][j];
+                removeFocusListener(field);
+                removeKeyListener(field);
+            }
+        }
+    }
+
+    private void removeFocusListener(JTextField field) {
+        for (FocusListener listener : field.getFocusListeners()) {
+            field.removeFocusListener(listener);
+        }
+    }
+
+    private void removeKeyListener(JTextField field) {
+        for (KeyListener listener : field.getKeyListeners()) {
+            field.removeKeyListener(listener);
+        }
+    }
+    public int[][] newArray(int[][] reloadNet){
+        int[][] tempArray = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (reloadNet[i][j] == 0){
+                    tempArray[i][j] = 1;
+                }
+                else {
+                    tempArray[i][j] = 0;
+                }
+            }
+        }
+
+        return tempArray;
+
+    }
+    public JTextField[][] cleanFields(JTextField[][] sudokuFields){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                sudokuFields[i][j].setText(" ");
+            }
+        }
+        return sudokuFields;
+    }
     public void cleanBoards(int[][] sudokuNet, int[][] reloadNet, int[][] compareNet){
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -22,8 +70,8 @@ public class Model {
             }
         }
     }
-    public int[][] generateNewBoard (int[][] sudokuNet){
-        generateLevel.generateBoard(30,sudokuNet, reloadNet,compareNet);
+    public int[][] generateNewBoard (int[][] sudokuNet, int emptyCells){
+        generateLevel.generateBoard(emptyCells,sudokuNet, reloadNet,compareNet);
         return sudokuNet;
     }
 

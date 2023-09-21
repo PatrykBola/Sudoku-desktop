@@ -4,12 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.im.InputContext;
 
 public class View extends JFrame {
     JTextField[][] sudokuFields = new JTextField[9][9];
         Label bottomLabel = new Label();
         private String defaultInfo = "Sudoku APP";
-    private JButton newGameButton, reloadButton;
+    private JButton newGameButton, reloadButton, easyButton, mediumButton, hardButton;
 
     private final int SUBGRID_SIZE = 3;
     private final int CELL_SIZE = 40;
@@ -18,6 +19,10 @@ public class View extends JFrame {
     private final int MARGIN_RIGHT = 50;
     private final int MARGIN_BOTTOM = 110;
     private final int TOTAL_WIDTH = (CELL_SIZE * 9) + MARGIN_LEFT + MARGIN_RIGHT + (SUBGRID_SIZE * 2);
+
+    public Label getBottomLabel() {
+        return bottomLabel;
+    }
 
     public void creatingGui() {
         setTitle("Sudoku Game");
@@ -28,16 +33,19 @@ public class View extends JFrame {
         setLayout(null);
         newGameButton = new JButton("New Game");
         reloadButton = new JButton("Reload");
+        easyButton = new JButton("Easy");
+        mediumButton = new JButton("Medium");
+        hardButton = new JButton("Hard");
         newGameButton.setBounds(MARGIN_LEFT, MARGIN_TOP - 50, 100, 30);
         reloadButton.setBounds(MARGIN_LEFT + 260, MARGIN_TOP - 50, 100, 30);
         newGameButton.setSize(100, 35);
         reloadButton.setSize(100, 35);
         add(newGameButton);
         add(reloadButton);
-        bottomLabel = infoLabel();
-
-//        textField = infoField();
-//        add(infoLabel("Sudoku App"));
+        bottomLabel = infoLabel(true);
+        add(bottomLabel);
+//        bottomEMHButtons(false);
+//        bottomLabel = infoLabel(false);
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
@@ -48,7 +56,17 @@ public class View extends JFrame {
 
 
     }
-
+    public void bottomEMHButtons(boolean visible){
+        easyButton.setBounds(MARGIN_LEFT+20,440,100,35);
+        mediumButton.setBounds((TOTAL_WIDTH/2) - 50,440,100,35);
+        hardButton.setBounds(MARGIN_LEFT + 240,440,100,35);
+        add(easyButton);
+        add(mediumButton);
+        add(hardButton);
+        easyButton.setVisible(visible);
+        mediumButton.setVisible(visible);
+        hardButton.setVisible(visible);
+    }
 
     public void changingDefaultFieldsColor(int[][] reloadNet, JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
@@ -105,13 +123,15 @@ public class View extends JFrame {
         return bottomLabel;
     }
 
-    public Label infoLabel() {
+    public Label infoLabel(boolean visible) {
+
         Label label = new Label();
+        label.setVisible(visible);
         label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
         label.setAlignment(Label.CENTER);
         label.setBounds((TOTAL_WIDTH / 2) - 100, 440, 200, 50);
         label.setText("Sudoku App");
-        add(label);
+
         return label;
     }
 
@@ -157,5 +177,7 @@ public class View extends JFrame {
         newGameButton.addActionListener(listener);
     }
 
-
+   public void addEasyButtonActionListener(ActionListener listener){easyButton.addActionListener(listener);}
+    public void addMediumButtonActionListener(ActionListener listener){mediumButton.addActionListener(listener);}
+    public void addHardButtonActionListener(ActionListener listener){hardButton.addActionListener(listener);}
 }
