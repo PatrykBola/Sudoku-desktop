@@ -92,8 +92,10 @@ public class View extends JFrame {
                 sudokuFields[i][j] = sudokuField();
                 sudokuFields[i][j].setBounds(MARGIN_LEFT + j * CELL_SIZE, MARGIN_TOP + i * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 add(sudokuFields[i][j]);
+
             }
         }
+
     }
 
     public JTextField[][] updateSudokuFields(int[][] sudokuNet, JTextField[][] sudokuFields) {
@@ -140,8 +142,21 @@ public class View extends JFrame {
         field.setFont(new Font("Times New Roman", Font.BOLD, 14));
         field.setHorizontalAlignment(JTextField.CENTER);
         field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
         return field;
+    }
+
+    public JTextField[][] setBoxBorders(JTextField[][] sudokuFields){
+        for (int i = 0; i < 9; i++) {
+            sudokuFields[2][i].setBorder(BorderFactory.createMatteBorder(1,1,3,1,Color.BLACK));
+            sudokuFields[5][i].setBorder(BorderFactory.createMatteBorder(1,1,3,1,Color.BLACK));
+            sudokuFields[i][2].setBorder(BorderFactory.createMatteBorder(1,1,1,3,Color.BLACK));
+            sudokuFields[i][5].setBorder(BorderFactory.createMatteBorder(1,1,1,3,Color.BLACK));
+        }
+        sudokuFields[2][2].setBorder(BorderFactory.createMatteBorder(1,1,3,3,Color.BLACK));
+        sudokuFields[2][5].setBorder(BorderFactory.createMatteBorder(1,1,3,3,Color.BLACK));
+        sudokuFields[5][2].setBorder(BorderFactory.createMatteBorder(1,1,3,3,Color.BLACK));
+        sudokuFields[5][5].setBorder(BorderFactory.createMatteBorder(1,1,3,3,Color.BLACK));
+        return sudokuFields;
     }
 
     public void printNet(int[][] sudokuNet) {
