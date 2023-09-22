@@ -27,6 +27,7 @@ public class Controller {
         view.creatingFields(sudokuFields);
         model.loadIntArrayToJTextFieldArray(sudokuNet, sudokuFields);
         view.creatingGui();
+        view.setBoxBorders(sudokuFields);
         view.changingDefaultFieldsColor(reloadNet, sudokuFields);
         view.infoLabel(true);
 
@@ -40,10 +41,55 @@ public class Controller {
                 attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet);
             }
         });
+
+//        newGameListener();
 //
         view.addNewGameButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                newGameListener();
+//                view.getBottomLabel().setSize(0,0);
+//                view.bottomEMHButtons(true);
+//
+//                view.addEasyButtonActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        view.bottomEMHButtons(false);
+//                        emptyCells = random.nextInt(26, 31);
+//                        System.out.println(emptyCells);
+//                        creatingNewGame(sudokuFields, reloadNet, sudokuNet, compareNet, emptyCells);
+//                        view.getBottomLabel().setSize(200,50);
+//
+//                    }
+//                });
+//                view.addMediumButtonActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        emptyCells = random.nextInt(32,39);
+//                        System.out.println(emptyCells);
+//                        creatingNewGame(sudokuFields,reloadNet,sudokuNet,compareNet,emptyCells);
+//                        view.bottomEMHButtons(false);
+//                        view.getBottomLabel().setSize(200,50);
+//                    }
+//                });
+//                view.addHardButtonActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        emptyCells = random.nextInt(40,47);
+//                        System.out.println(emptyCells);
+//                        creatingNewGame(sudokuFields,reloadNet,sudokuNet,compareNet,emptyCells);
+//                        view.bottomEMHButtons(false);
+//                        view.getBottomLabel().setSize(200,50);
+//                    }
+//                });
+
+            }
+        });
+//
+    }
+
+    public void newGameListener(){
+
                 view.getBottomLabel().setSize(0,0);
                 view.bottomEMHButtons(true);
 
@@ -51,7 +97,8 @@ public class Controller {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         view.bottomEMHButtons(false);
-                        emptyCells = random.nextInt(26, 31);
+//                        emptyCells = random.nextInt(26, 31);
+                        emptyCells = 1;
                         System.out.println(emptyCells);
                         creatingNewGame(sudokuFields, reloadNet, sudokuNet, compareNet, emptyCells);
                         view.getBottomLabel().setSize(200,50);
@@ -79,17 +126,7 @@ public class Controller {
                     }
                 });
 
-            }
-        });
 
-//        view.addEasyButtonActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                emptyCells = random.nextInt(26, 31);
-//                System.out.println(emptyCells);
-//                creatingNewGame(sudokuFields, reloadNet, sudokuNet, compareNet, emptyCells);
-//            }
-//        });
     }
 
     public void creatingNewGame(JTextField[][] sudokuFields, int[][] reloadNet, int[][] sudokuNet, int[][] compareNet, int emptyCells) {
@@ -110,10 +147,8 @@ public class Controller {
             for (int j = 0; j < 9; j++) {
                 int row = i;
                 int col = j;
-                int[][] tempArray = model.newArray(reloadNet);
 
-                if (tempArray[i][j] == 1) {
-                    count++;
+                if (reloadNet[i][j] == 0) {
                     sudokuFields[i][j].addFocusListener(new FocusAdapter() {
 
                         @Override
@@ -126,24 +161,8 @@ public class Controller {
                         @Override
                         public void focusLost(FocusEvent e) {
                             JTextField source = (JTextField) e.getSource();
-                            String input = source.getText();
-//                            System.out.println("a");
-                            try {
-//                                System.out.println("b");
-                                int value = Integer.parseInt(input);
-
-                                if (value == 1) {
-                                    view.shortInfo("Wrong");
-                                }
-
-                                model.setValue(row, col, value);
-//
-                                view.printNet(model.getSudokuNet());
-                            } catch (NumberFormatException ex) {
-                            } catch (InterruptedException ex) {
-                                throw new RuntimeException(ex);
-                            }
                             source.setBackground(view.getDefaultBackgroundColor());
+
                         }
                     });
 
@@ -153,24 +172,50 @@ public class Controller {
                             JTextField source = (JTextField) e.getSource();
                             char typedChar = e.getKeyChar();
 
-                            if (Character.isDigit(typedChar)) {
+                            if (model.digitBetweenOneAndNine(typedChar)) {
+
                                 source.setText(String.valueOf(typedChar));
                                 source.setBackground(view.getSelectedBackgroundColor());
                                 source.getCaret().setVisible(false);
+
                                 e.consume();
 
                                 model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
                                 source.setBackground(view.getDefaultBackgroundColor());
                                 source.setEditable(false);
+
                                 String val = Character.toString(typedChar);
                                 int value = Integer.parseInt(val);
+
                                 model.setValue(row, col, value);
+
                                 Component nextComponent = getNextComponent(sudokuFields, reloadNet);
                                 if (nextComponent != null) {
                                     nextComponent.requestFocusInWindow();
                                 }
 
                                 model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
+                                try {
+                                    view.shortInfo("Good !");
+                                } catch (InterruptedException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                model.removeListenerFromOneField(sudokuFields,row,col);
+                                if (model.isSolved(sudokuNet)){
+                                    newGameListener();
+                                }
+
+                            }
+                            else {
+                                try {
+                                    view.shortInfo("Wrong !");
+                                } catch (InterruptedException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                Component nextComponent = getNextComponent(sudokuFields, reloadNet);
+                                if (nextComponent != null) {
+                                    nextComponent.requestFocusInWindow();
+                                }
                             }
 
                         }

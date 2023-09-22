@@ -16,6 +16,22 @@ public class Model {
     private JTextField[][] sudokuFields = new JTextField[9][9];
 
 
+    public boolean digitBetweenOneAndNine(char typedChar){
+        String val = Character.toString(typedChar);
+        int value = Integer.parseInt(val);
+        for (int i = 1; i <=9; i++) {
+            if (value == i ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeListenerFromOneField(JTextField[][] sudokuFields,int row, int col){
+        JTextField field =  sudokuFields[row][col];
+        removeFocusListener(field);
+        removeKeyListener(field);
+    }
     public void removeListenersFromSudokuFields(JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -37,14 +53,14 @@ public class Model {
             field.removeKeyListener(listener);
         }
     }
-    public int[][] newArray(int[][] reloadNet){
+
+    public int[][] newArray(int[][] reloadNet) {
         int[][] tempArray = new int[9][9];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (reloadNet[i][j] == 0){
+                if (reloadNet[i][j] == 0) {
                     tempArray[i][j] = 1;
-                }
-                else {
+                } else {
                     tempArray[i][j] = 0;
                 }
             }
@@ -53,7 +69,8 @@ public class Model {
         return tempArray;
 
     }
-    public JTextField[][] cleanFields(JTextField[][] sudokuFields){
+
+    public JTextField[][] cleanFields(JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 sudokuFields[i][j].setText(" ");
@@ -61,7 +78,8 @@ public class Model {
         }
         return sudokuFields;
     }
-    public void cleanBoards(int[][] sudokuNet, int[][] reloadNet, int[][] compareNet){
+
+    public void cleanBoards(int[][] sudokuNet, int[][] reloadNet, int[][] compareNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 sudokuNet[i][j] = 0;
@@ -70,25 +88,27 @@ public class Model {
             }
         }
     }
-    public int[][] generateNewBoard (int[][] sudokuNet, int emptyCells){
-        generateLevel.generateBoard(emptyCells,sudokuNet, reloadNet,compareNet);
+
+    public int[][] generateNewBoard(int[][] sudokuNet, int emptyCells) {
+        generateLevel.generateBoard(emptyCells, sudokuNet, reloadNet, compareNet);
         return sudokuNet;
     }
 
-    public int[][] readReloadBoard(){
-        this.reloadNet = fileService.read(reloadNet,fileService.getBoardToReload());
+    public int[][] readReloadBoard() {
+        this.reloadNet = fileService.read(reloadNet, fileService.getBoardToReload());
         return reloadNet;
     }
+
     public int[][] getReloadNet() {
         return reloadNet;
     }
 
-    public int[][] readCompareBoard(){
+    public int[][] readCompareBoard() {
         this.compareNet = fileService.read(compareNet, fileService.getCompareBoardPath());
         return compareNet;
     }
 
-    public int[][] reloadBoard(int[][] oldBoard, int[][] newBoard){
+    public int[][] reloadBoard(int[][] oldBoard, int[][] newBoard) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 oldBoard[i][j] = newBoard[i][j];
@@ -98,23 +118,11 @@ public class Model {
     }
 
 
-
-
-//    public int[][] colorFields(int[][] reloadNet,int[][] defaultColorField){
-//        for (int i = 0; i < 9; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                if (reloadNet[i][j] == 0){
-//                    defaultColorField[i][j] = 1;
-//                }
-//                else defaultColorField[i][j] = 0;
-//            }
-//        }
-//        return defaultColorField;
-//    }
-    public int[][] readSudokuNetFromFile(){
-        this.sudokuNet = fileService.read(sudokuNet,fileService.getMainBoardPath());
+    public int[][] readSudokuNetFromFile() {
+        this.sudokuNet = fileService.read(sudokuNet, fileService.getMainBoardPath());
         return sudokuNet;
     }
+
     public void updateSudokuFields(int[][] sudokuNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -126,7 +134,8 @@ public class Model {
             }
         }
     }
-    public void loadIntArrayToJTextFieldArray(int[][] sudokunet,JTextField[][] sudokuFields) {
+
+    public void loadIntArrayToJTextFieldArray(int[][] sudokunet, JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (sudokunet[i][j] != 0) {
@@ -137,45 +146,30 @@ public class Model {
             }
         }
     }
-//       public void newGameButton(){
-////        creatingFields();
-////        loadIntArrayToJTextFieldArray(sudokuNet);
-//           generateLevel.generateBoard(30,sudokuNet,reloadNet,compareNet);
-//           updateSudokuFields(sudokuNet);
-//           System.out.println(sudokuNet[1][1]);
-//
-//           for (int i = 0; i < 9; i++) {
-//               for (int j = 0; j < 9; j++) {
-//                   System.out.print(sudokuNet[i][j] + " ");
-//               }
-//               System.out.println();
-//           }
-//           System.out.println(getValue(0,0));
-//       }
 
-        public int[][] getSudokuNet () {
-            return sudokuNet;
-        }
+    public int[][] getSudokuNet() {
+        return sudokuNet;
+    }
 
-        public void setSudokuNet ( int[][] sudokuArr){
-            this.sudokuNet = sudokuArr;
-        }
 
-        public int getValue ( int x, int y){
-            return sudokuNet[x][y];
-        }
-
-        public boolean setValue ( int x, int y, int digit){
-            sudokuNet[x][y] = digit;
+    public void setValue(int x, int y, int digit) {
+        sudokuNet[x][y] = digit;
 //        if (isValid(x, y, digit)) {
 //            this.sudokuNet[x][y] = digit;
 //            fileService.save(this.sudokuNet, fileService.getMainBoardPath()); // Zapis do pliku po ustawieniu wartości
 //            return true;
 //        }
+//            return true;
+    }
+
+    public boolean isValid(int[][] sudokuNet, int[][] compareNet, int x, int y) {
+        if (compareNet[x][y] == sudokuNet[x][y]) {
             return true;
         }
+        return false;
+    }
 
-//        public boolean isValid ( int x, int y, int digit){
+    //        public boolean isValid ( int x, int y, int digit){
 //            for (int i = 0; i < 9; i++) {
 //                if (sudokuNet[x][i] == digit) {             //Sprawdza X
 //                    return false;
@@ -199,17 +193,16 @@ public class Model {
 //            return true;
 //        }
 //
-//        public boolean isSolved ( int[][] sudokuNet){
-//            for (int x = 0; x < 9; x++) {
-//                for (int y = 0; y < 9; y++) {
-//                    if (this.sudokuNet[x][y] == 0) {
-//                        return false;
-//                    }
-//                }
-//            }
-//            return true;
-//        }
-
+    public boolean isSolved(int[][] sudokuNet) {
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                if (sudokuNet[x][y] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 
 }
