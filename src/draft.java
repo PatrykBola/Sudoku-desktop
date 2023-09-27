@@ -1,50 +1,44 @@
-//public class draft {
-//    private void attachListenersToSudokuFields() {
-//        for (int i = 0; i < 9; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                final int row = i;
-//                final int col = j;
+//@Override
+//public void keyTyped(KeyEvent e) {
+//        JTextField source = (JTextField) e.getSource();
+//        char typedChar = e.getKeyChar();
 //
-//                JTextField[][] sudokuFields = view.getSudokuFields();
+//        if (Character.isDigit(typedChar)) {
+//        int typedValue = Character.getNumericValue(typedChar);
 //
-//                sudokuFields[i][j].addFocusListener(new FocusAdapter() {
-//                    @Override
-//                    public void focusGained(FocusEvent e) {
-//                        JTextField source = (JTextField) e.getSource();
-//                        source.setBackground(view.getSelectedBackgroundColor());
-//                        view.setSelectedRow(row);
-//                        view.setSelectedCol(col);
-//                        source.getCaret().setVisible(false);
-//                    }
+//        if (typedValue >= 1 && typedValue <= 9) {
+//        // Poprawna cyfra wpisana
+//        source.setText(String.valueOf(typedChar));
+//        source.setBackground(view.getSelectedBackgroundColor());
+//        source.getCaret().setVisible(false);
+//        e.consume();
 //
-//                    @Override
-//                    public void focusLost(FocusEvent e) {
-//                        // Nie musisz nic robić w momencie utraty focusu
-//                    }
-//                });
+//        // Reszta istniejącej logiki...
 //
-//                sudokuFields[i][j].addKeyListener(new KeyAdapter() {
-//                    @Override
-//                    public void keyTyped(KeyEvent e) {
-//                        JTextField source = (JTextField) e.getSource();
-//                        String input = source.getText();
-//                        if (input.length() == 1) {
-//                            try {
-//                                int value = Integer.parseInt(input);
-//                                model.setValue(row, col, value);
-//                                model.fileService.save(model.getSudokuNet(), model.fileService.getMainBoardPath());
-//                                source.setBackground(view.getDefaultBackgroundColor());
-//                                source.getCaret().setVisible(false);
-//                                // Po wprowadzeniu nowej cyfry, przekazujemy focus do innego komponentu
-//                                source.transferFocus();
-//                            } catch (NumberFormatException ex) {
-//                                System.out.println("Niepoprawny format wprowadzonych danych!");
-//                            }
-//                        }
-//                    }
-//                });
-//            }
+//        if (model.compareToSecondBoard(compareNet, typedValue, row, col)) {
+//        // Reszta istniejącej logiki...
+//
+//        } else {
+//        // Reszta istniejącej logiki...
 //        }
-//    }
-//
-//}
+//        } else {
+//        // Wyświetl "Wrong!" tylko dla niepoprawnych cyfr
+//        try {
+//        source.setText("");
+//        source.setBackground(view.getSelectedBackgroundColor());
+//        view.shortInfo("Wrong");
+//        } catch (InterruptedException ex) {
+//        throw new RuntimeException(ex);
+//        }
+//        }
+//        } else {
+//        // Wyświetl "Wrong!" dla znaków inne niż cyfry
+//        try {
+//        source.setText("");
+//        source.setBackground(view.getSelectedBackgroundColor());
+//        view.shortInfo("Wrong");
+//        } catch (InterruptedException ex) {
+//        throw new RuntimeException(ex);
+//        }
+//        }
+//        }

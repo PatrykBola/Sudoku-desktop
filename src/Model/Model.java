@@ -3,6 +3,7 @@ package Model;
 import Model.Levels.GenerateLevel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
@@ -16,22 +17,42 @@ public class Model {
     private JTextField[][] sudokuFields = new JTextField[9][9];
 
 
-    public boolean digitBetweenOneAndNine(char typedChar){
-        String val = Character.toString(typedChar);
-        int value = Integer.parseInt(val);
-        for (int i = 1; i <=9; i++) {
-            if (value == i ){
-                return true;
-            }
+
+    public JTextField[] fillFields(JTextField[] doneNumbers){
+        for (int i = 0; i < 9; i++) {
+            doneNumbers[i].setText(String.valueOf(i+1));
+            doneNumbers[i].setEditable(false);
+            doneNumbers[i].getCaret().setVisible(false);
+        }
+        return doneNumbers;
+    }
+    public boolean compareToSecondBoard (int[][] compareNet, int value, int x, int y){
+        if (value == compareNet[x][y]){
+            return true;
         }
         return false;
     }
 
-    public void removeListenerFromOneField(JTextField[][] sudokuFields,int row, int col){
-        JTextField field =  sudokuFields[row][col];
+    public boolean digitBetweenOneAndNine(char typedChar) {
+        if (Character.isDigit(typedChar)) {
+            String val = Character.toString(typedChar);
+            int value = Integer.parseInt(val);
+            for (int i = 1; i <= 9; i++) {
+                if (value == i) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public void removeListenerFromOneField(JTextField[][] sudokuFields, int row, int col) {
+        JTextField field = sudokuFields[row][col];
         removeFocusListener(field);
         removeKeyListener(field);
     }
+
     public void removeListenersFromSudokuFields(JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -154,45 +175,9 @@ public class Model {
 
     public void setValue(int x, int y, int digit) {
         sudokuNet[x][y] = digit;
-//        if (isValid(x, y, digit)) {
-//            this.sudokuNet[x][y] = digit;
-//            fileService.save(this.sudokuNet, fileService.getMainBoardPath()); // Zapis do pliku po ustawieniu wartości
-//            return true;
-//        }
-//            return true;
     }
 
-    public boolean isValid(int[][] sudokuNet, int[][] compareNet, int x, int y) {
-        if (compareNet[x][y] == sudokuNet[x][y]) {
-            return true;
-        }
-        return false;
-    }
 
-    //        public boolean isValid ( int x, int y, int digit){
-//            for (int i = 0; i < 9; i++) {
-//                if (sudokuNet[x][i] == digit) {             //Sprawdza X
-//                    return false;
-//                }
-//            }
-//
-//            for (int i = 0; i < 9; i++) {
-//                if (sudokuNet[i][y] == digit) {             //Sprawdza Y
-//                    return false;
-//                }
-//            }
-//            int boxX = x - x % 3;
-//            int boxY = y - y % 3;
-//            for (int i = boxX; i < boxX + 3; i++) {     // Sprawdza box 3x3
-//                for (int j = boxY; j < boxY + 3; j++) {
-//                    if (sudokuNet[i][j] == digit) {
-//                        return false;
-//                    }
-//                }
-//            }
-//            return true;
-//        }
-//
     public boolean isSolved(int[][] sudokuNet) {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {

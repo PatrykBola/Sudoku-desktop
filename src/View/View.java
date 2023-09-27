@@ -20,8 +20,16 @@ public class View extends JFrame {
     private final int MARGIN_BOTTOM = 110;
     private final int TOTAL_WIDTH = (CELL_SIZE * 9) + MARGIN_LEFT + MARGIN_RIGHT + (SUBGRID_SIZE * 2);
 
+
     public Label getBottomLabel() {
         return bottomLabel;
+    }
+
+    public JTextField[] cleatDoneNumbers(JTextField[] doneNumbers){
+        for (int i = 0; i < 9; i++) {
+            doneNumbers[i].setBackground(Color.WHITE);
+        }
+        return doneNumbers;
     }
 
     public void creatingGui() {
@@ -36,8 +44,8 @@ public class View extends JFrame {
         easyButton = new JButton("Easy");
         mediumButton = new JButton("Medium");
         hardButton = new JButton("Hard");
-        newGameButton.setBounds(MARGIN_LEFT, MARGIN_TOP - 50, 100, 30);
-        reloadButton.setBounds(MARGIN_LEFT + 260, MARGIN_TOP - 50, 100, 30);
+        newGameButton.setBounds(MARGIN_LEFT, MARGIN_TOP - 55, 100, 30);
+        reloadButton.setBounds(MARGIN_LEFT + 260, MARGIN_TOP - 55, 100, 30);
         newGameButton.setSize(100, 35);
         reloadButton.setSize(100, 35);
         add(newGameButton);
@@ -57,9 +65,9 @@ public class View extends JFrame {
 
     }
     public void bottomEMHButtons(boolean visible){
-        easyButton.setBounds(MARGIN_LEFT+20,440,100,35);
-        mediumButton.setBounds((TOTAL_WIDTH/2) - 50,440,100,35);
-        hardButton.setBounds(MARGIN_LEFT + 240,440,100,35);
+        easyButton.setBounds(MARGIN_LEFT+20,465,100,35);
+        mediumButton.setBounds((TOTAL_WIDTH/2) - 50,465,100,35);
+        hardButton.setBounds(MARGIN_LEFT + 240,465,100,35);
         add(easyButton);
         add(mediumButton);
         add(hardButton);
@@ -90,12 +98,27 @@ public class View extends JFrame {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 sudokuFields[i][j] = sudokuField();
-                sudokuFields[i][j].setBounds(MARGIN_LEFT + j * CELL_SIZE, MARGIN_TOP + i * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                sudokuFields[i][j].setBounds(MARGIN_LEFT + j * CELL_SIZE, MARGIN_TOP + i * CELL_SIZE + 30, CELL_SIZE, CELL_SIZE);
                 add(sudokuFields[i][j]);
 
             }
         }
 
+    }
+
+    public void doneNumbersFields(JTextField[] doneNumbers){
+        for (int i = 0; i < 9; i++) {
+            JTextField field = new JTextField();
+            doneNumbers[i] = sudokuField();
+
+            doneNumbers[i].setBounds(MARGIN_LEFT+15 + i * CELL_SIZE-10,MARGIN_TOP-10,CELL_SIZE-10,CELL_SIZE-10);
+            add(doneNumbers[i]);
+//            field.setEditable(false);
+//            int value = i+1;
+//
+//            String text = String.valueOf(i) + 1;
+//            field.setText(text);
+        }
     }
 
     public JTextField[][] updateSudokuFields(int[][] sudokuNet, JTextField[][] sudokuFields) {
@@ -112,7 +135,7 @@ public class View extends JFrame {
     }
 
     public Label shortInfo(String info) throws InterruptedException {
-        Timer timer = new Timer(2000, new ActionListener() {
+        Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bottomLabel.setText(defaultInfo);
@@ -131,7 +154,7 @@ public class View extends JFrame {
         label.setVisible(visible);
         label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
         label.setAlignment(Label.CENTER);
-        label.setBounds((TOTAL_WIDTH / 2) - 100, 440, 200, 50);
+        label.setBounds((TOTAL_WIDTH / 2) - 100, 460, 200, 50);
         label.setText("Sudoku App");
 
         return label;
@@ -182,7 +205,12 @@ public class View extends JFrame {
 
     private Color defaultBackgroundColor = Color.WHITE; // Domyślny kolor tła
     private Color selectedBackgroundColor = new Color(152, 188, 151);
-    private Color defaultFieldColor = new Color(34, 198, 32);// Kolor tła dla zaznaczonego pola
+    private Color defaultFieldColor = new Color(34, 198, 32);
+    private Color doneNumbersColor = new Color(6, 86, 6);
+
+    public Color getDoneNumbersColor() {
+        return doneNumbersColor;
+    }
 
     public void addReloadButtonActionListener(ActionListener listener) {
         reloadButton.addActionListener(listener);
