@@ -44,15 +44,13 @@ public class GenerateLevel {
             y = 0;
             x++;
             if (x == 9) {
-                return true; // plansza jest wypełniona
+                return true;
             }
         }
 
         int boxX = x / 3 * 3;
         int boxY = y / 3 * 3;
-
         for (int i = 0; i < 9; i++) {
-//            System.out.println(sudokuNet[i][i]);
             int number = numbers.get(i);
             if (existInBoard(number, x, y, boxX, boxY, sudokuNet)) {
                 sudokuNet[x][y] = number;
@@ -61,10 +59,7 @@ public class GenerateLevel {
                 }
             }
         }
-
-
-//
-        sudokuNet[x][y] = 0; // cofnięcie wyboru liczby
+        sudokuNet[x][y] = 0;
         return false;
     }
 
@@ -82,7 +77,6 @@ public class GenerateLevel {
                 }
             }
         }
-
         return true;
     }
 

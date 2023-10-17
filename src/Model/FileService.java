@@ -3,14 +3,10 @@ package Model;
 import java.io.*;
 
 public class FileService {
-//    Model model = new Model();
     private final String mainBoardPath= "D:/git/SudokuApp/src/gameBoard.txt";
     private final String compareBoardPath= "D:/git/SudokuApp/src/boardToCompare.txt";
     private final String boardToReload= "D:/git/SudokuApp/src/boardToReload.txt";
-
-//    private int[][] sudokuNet = new int[9][9];
-
-
+    private final String otherDataPath = "D:/git/SudokuApp/src/otherDate.txt";
     public String getMainBoardPath() {
         return this.mainBoardPath;
     }
@@ -32,11 +28,29 @@ public class FileService {
         } catch (IOException e) {
             System.out.println("Error");
         }
-        //truncate
     }
+    public void saveWrongAnswers(int wrongs){
+        try {
+            PrintWriter pw = new PrintWriter(otherDataPath);
+            pw.print(wrongs);
+            pw.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public int readWrongAnswers(){
+         int wrongs = 0;
 
+        try (BufferedReader br = new BufferedReader(new FileReader(otherDataPath))) {
+            String line = br.readLine(); 
+            wrongs = Integer.parseInt(String.valueOf(line));
+            
+        } catch (IOException e) {
+            System.err.println("Błąd podczas odczytu pliku: " + e.getMessage());
+        }
+        return wrongs;
+    }
     public int[][] read(int[][] arrayBoard, String filePath) {
-//        int[][] arrayBoard = new int[9][9];
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(filePath));
