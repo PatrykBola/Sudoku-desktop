@@ -2,12 +2,14 @@ package Controller;
 
 import Model.Model;
 import View.View;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 
-public class Controller {
+
+public class Controller extends JFrame {
     Random random = new Random();
     private final Model model = new Model();
     private final View view = new View();
@@ -18,9 +20,10 @@ public class Controller {
     private final JTextField[][] sudokuFields = new JTextField[9][9];
     private final JTextField[] doneNumbers = new JTextField[9];
     private JLabel[] redCrosses = new JLabel[3];
-    int count = 0;
+    private JLabel timeLabel = view.getTimeLabel();
 
-    public void play() throws InterruptedException {
+    public void play()  {
+        view.getTimeLabel().setText(view.getCurrentTime());
         view.createJLabelsWithCrosses(redCrosses);
         System.out.println(model.getWrongs());
         model.showRedCrosses(model.getWrongs(), redCrosses);
@@ -35,42 +38,67 @@ public class Controller {
         view.setBoxBorders(sudokuFields);
         view.changingDefaultFieldsColor(reloadNet, sudokuFields);
         view.infoLabel(true);
-        isNumberReady(doneNumbers,sudokuNet);
-        attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet, doneNumbers);
+        isNumberReady(doneNumbers, sudokuNet);
+
+        if (model.isSolved(sudokuNet)){
+            newGameListener();
+        } else  {
+            attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet, doneNumbers);
+            if (model.getWrongs() == 3 && (!model.isSolved(sudokuNet))) {
+                view.showAllRedCrosses(redCrosses);
+                model.removeListenersFromSudokuFields(sudokuFields);
+                newGameListener();
+            }
+        }
+
         view.addReloadButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.getTimer().stop();
+                view.saveCurrentTime("00:00:00");
+                resetTimer();
+                view.bottomEMHButtons(false);
+                view.getBottomLabel().setSize(200, 50);
+                model.setWrongs(0);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 model.reloadBoard(sudokuNet, reloadNet);
                 view.updateSudokuFields(sudokuNet, sudokuFields);
                 view.reloadingDefaultFieldsColor(reloadNet, sudokuFields);
                 view.changingDefaultFieldsColor(reloadNet, sudokuFields);
                 model.removeListenersFromSudokuFields(sudokuFields);
                 view.cleatDoneNumbers(doneNumbers);
-                isNumberReady(doneNumbers,sudokuNet);
+                isNumberReady(doneNumbers, sudokuNet);
+                view.saveCurrentTime("00:00:00");
                 attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet, doneNumbers);
             }
         });
         view.addNewGameButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.getTimer().stop();
                 newGameListener();
             }
         });
     }
 
     public void newGameListener() {
+        view.saveCurrentTime("00:00:00");
+        model.removeListenersFromSudokuFields(sudokuFields);
         view.getBottomLabel().setSize(0, 0);
         view.bottomEMHButtons(true);
-        model.resetRedCrosses(model.getWrongs(),redCrosses);
+
         view.addEasyButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.saveCurrentTime("00:00:00");
+                resetTimer();
+                model.setWrongs(0);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 view.hideAllRedCrosses(redCrosses);
-                model.resetRedCrosses(model.getWrongs(),redCrosses);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 view.cleatDoneNumbers(doneNumbers);
                 view.bottomEMHButtons(false);
-//                        emptyCells = random.nextInt(26, 31);
-                emptyCells = 1;
+                        emptyCells = random.nextInt(26, 31);
                 creatingNewGame(sudokuFields, reloadNet, sudokuNet, compareNet, emptyCells);
                 view.getBottomLabel().setSize(200, 50);
 
@@ -79,8 +107,12 @@ public class Controller {
         view.addMediumButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.saveCurrentTime("00:00:00");
+                resetTimer();
+                model.setWrongs(0);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 view.hideAllRedCrosses(redCrosses);
-                model.resetRedCrosses(model.getWrongs(),redCrosses);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 view.cleatDoneNumbers(doneNumbers);
                 emptyCells = random.nextInt(32, 39);
                 creatingNewGame(sudokuFields, reloadNet, sudokuNet, compareNet, emptyCells);
@@ -91,8 +123,13 @@ public class Controller {
         view.addHardButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                resetTimer();
+                view.saveCurrentTime("00:00:00");
+                model.setWrongs(0);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 view.hideAllRedCrosses(redCrosses);
-                model.resetRedCrosses(model.getWrongs(),redCrosses);
+                model.resetRedCrosses(model.getWrongs(), redCrosses);
                 view.cleatDoneNumbers(doneNumbers);
                 emptyCells = random.nextInt(40, 47);
                 creatingNewGame(sudokuFields, reloadNet, sudokuNet, compareNet, emptyCells);
@@ -101,6 +138,7 @@ public class Controller {
             }
         });
     }
+
     public void creatingNewGame(JTextField[][] sudokuFields, int[][] reloadNet, int[][] sudokuNet, int[][] compareNet, int emptyCells) {
         model.cleanBoards(sudokuNet, reloadNet, compareNet);
         model.generateNewBoard(sudokuNet, emptyCells);
@@ -112,23 +150,25 @@ public class Controller {
         view.changingDefaultFieldsColor(reloadNet, sudokuFields);
         model.removeListenersFromSudokuFields(sudokuFields);
         model.fillFields(doneNumbers);
-        isNumberReady(doneNumbers,sudokuNet);
+        isNumberReady(doneNumbers, sudokuNet);
+        view.saveCurrentTime("00:00:00");
         attachListenersToSudokuFields(sudokuFields, reloadNet, compareNet, doneNumbers);
     }
-    public void attachListenersToDoneNumbersFields(JTextField[] doneNumbers,JTextField[][] sudokuFields){
+
+    public void attachListenersToDoneNumbersFields(JTextField[] doneNumbers, JTextField[][] sudokuFields) {
         for (int i = 0; i < 9; i++) {
             doneNumbers[i].addFocusListener(new FocusAdapter() {
                 @Override
                 public void focusGained(FocusEvent e) {
 
                     JTextField doneColor = (JTextField) e.getSource();
-                    if (doneColor.getBackground() != view.getDefaultFieldColor()){
+                    if (doneColor.getBackground() != view.getDefaultFieldColor()) {
                         doneColor.setBackground(view.getDoneNumbersColor());
 
                         doneColor.setForeground(Color.WHITE);
                         for (int j = 0; j < 9; j++) {
                             for (int k = 0; k < 9; k++) {
-                                if (sudokuFields[j][k].getText().equals(doneColor.getText()) ){
+                                if (sudokuFields[j][k].getText().equals(doneColor.getText())) {
                                     sudokuFields[j][k].setBackground(view.getDoneNumbersColor());
                                     sudokuFields[j][k].setForeground(Color.WHITE);
                                 }
@@ -141,25 +181,27 @@ public class Controller {
                 @Override
                 public void focusLost(FocusEvent e) {
                     JTextField doneColor = (JTextField) e.getSource();
-                    if (doneColor.getBackground() == view.getDoneNumbersColor()){
+                    if (doneColor.getBackground() == view.getDoneNumbersColor()) {
                         doneColor.setBackground(Color.WHITE);
                         doneColor.setForeground(Color.BLACK);
                         for (int j = 0; j < 9; j++) {
                             for (int k = 0; k < 9; k++) {
-                                if (sudokuFields[j][k].getText().equals(doneColor.getText()) ){
+                                if (sudokuFields[j][k].getText().equals(doneColor.getText())) {
                                     sudokuFields[j][k].setBackground(view.getDefaultFieldColor());
                                     sudokuFields[j][k].setForeground(Color.BLACK);
                                 }
                             }
                         }
                     }
-                    view.setDefaultColorsOfFields(reloadNet,compareNet,sudokuNet,sudokuFields);
+                    view.setDefaultColorsOfFields(reloadNet,sudokuFields);
                 }
             });
         }
     }
+
     public void attachListenersToSudokuFields(JTextField[][] sudokuFields, int[][] reloadNet, int[][] compareNet, JTextField[] doneNumbers) {
         attachListenersToDoneNumbersFields(doneNumbers, sudokuFields);
+
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 int row = i;
@@ -170,6 +212,7 @@ public class Controller {
 
                         @Override
                         public void focusGained(FocusEvent e) {
+                            view.getTimer().start();
                             JTextField color = (JTextField) e.getSource();
 
                             color.getCaret().setVisible(false);
@@ -183,8 +226,8 @@ public class Controller {
                                 }
                             }
                             for (int k = 0; k < 9; k++) {
-                                    sudokuFields[row][k].setBackground(view.getBacklightColor());
-                                    sudokuFields[k][col].setBackground(view.getBacklightColor());
+                                sudokuFields[row][k].setBackground(view.getBacklightColor());
+                                sudokuFields[k][col].setBackground(view.getBacklightColor());
                             }
                             color.setBackground(view.getSelectedBackgroundColor());
                         }
@@ -192,17 +235,15 @@ public class Controller {
                         @Override
                         public void focusLost(FocusEvent e) {
                             JTextField source = (JTextField) e.getSource();
-                            source.setBackground(view.getDefaultBackgroundColor()); // rowne ""
-
-                            view.setDefaultColorsOfFields(reloadNet,compareNet,sudokuNet,sudokuFields);
+                            source.setBackground(view.getDefaultBackgroundColor());
+                            view.setDefaultColorsOfFields(reloadNet,sudokuFields);
                             for (int k = 0; k < 9; k++) {
                                 for (int l = 0; l < 9; l++) {
-                                    if (sudokuFields[k][l].getText().equals(" ")){
-                                            sudokuFields[k][l].setBackground(view.getDefaultBackgroundColor());
-                                        }
-                                        else if (reloadNet[k][l] != 0){
-                                            sudokuFields[k][l].setBackground(view.getDefaultFieldColor());
-                                        }
+                                    if (sudokuFields[k][l].getText().equals(" ")) {
+                                        sudokuFields[k][l].setBackground(view.getDefaultBackgroundColor());
+                                    } else if (reloadNet[k][l] != 0) {
+                                        sudokuFields[k][l].setBackground(view.getDefaultFieldColor());
+                                    }
                                 }
                             }
                         }
@@ -236,27 +277,30 @@ public class Controller {
                                     model.removeListenerFromOneField(sudokuFields, row, col);
                                     try {
                                         view.shortInfo("Good !");
-                                        isNumberReady(doneNumbers,sudokuNet);
+                                        isNumberReady(doneNumbers, sudokuNet);
                                     } catch (InterruptedException ex) {
                                         throw new RuntimeException(ex);
                                     }
                                     if (model.isSolved(sudokuNet)) {
-                                        model.setWrongs(0);
+                                        view.getTimer().stop();
                                         newGameListener();
 
                                     }
-                                    view.setDefaultColorsOfFields(reloadNet,compareNet,sudokuNet,sudokuFields);
+                                    view.setDefaultColorsOfFields(reloadNet, sudokuFields);
+
+
                                 } else {
                                     try {
                                         source.setText("");
                                         source.setBackground(view.getSelectedBackgroundColor());
                                         view.shortInfo("Wrong");
-                                        model.setWrongs(model.getWrongs() +1);
+                                        model.setWrongs(model.getWrongs() + 1);
                                         model.fileService.saveWrongAnswers(model.getWrongs());
-                                        model.showRedCrosses(model.getWrongs(),redCrosses);
-                                        if (model.getWrongs() == 3){
+                                        model.showRedCrosses(model.getWrongs(), redCrosses);
+                                        if (model.getWrongs() == 3) {
+                                            view.getTimer().stop();
+                                            view.saveCurrentTime("00:00:00");
                                             model.removeListenersFromSudokuFields(sudokuFields);
-                                            model.setWrongs(0);
                                             newGameListener();
                                             view.showAllRedCrosses(redCrosses);
                                         }
@@ -264,6 +308,7 @@ public class Controller {
                                         throw new RuntimeException(ex);
                                     }
                                 }
+
                             } else if (!model.digitBetweenOneAndNine(typedChar)) {
 
                                 source.setDisabledTextColor(view.getDefaultBackgroundColor());
@@ -286,6 +331,7 @@ public class Controller {
             }
         }
     }
+
     private Component getNextComponent(JTextField[][] sudokuFields, int[][] reloadNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -296,24 +342,30 @@ public class Controller {
         }
         return null;
     }
-    public void isNumberReady (JTextField[] doneNumbers,int[][] sudokuNet){
+
+    public void isNumberReady(JTextField[] doneNumbers, int[][] sudokuNet) {
         int count = 0;
         for (int i = 1; i <= 9; i++) {
-            for (int j = 0; j <9 ; j++) {
+            for (int j = 0; j < 9; j++) {
                 for (int k = 0; k < 9; k++) {
-                    if (sudokuNet[j][k] == i){
+                    if (sudokuNet[j][k] == i) {
                         count++;
                     }
-                    if (count == 9){
-                        doneNumbers[i-1].setBackground(view.getDefaultFieldColor());
+                    if (count == 9) {
+                        doneNumbers[i - 1].setBackground(view.getDefaultFieldColor());
                         count = 0;
-                    }
-                    else if (count < 9 && j ==8  && k == 8){
+                    } else if (count < 9 && j == 8 && k == 8) {
                         count = 0;
                     }
                 }
             }
         }
+    }
+
+    public void resetTimer(){
+        view.saveCurrentTime("00:00:00");
+        view.timerLabel("00:00:00",timeLabel);
+        view.getTimeLabel().setText("00:00:00");
     }
 }
 

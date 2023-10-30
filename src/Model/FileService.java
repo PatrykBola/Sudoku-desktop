@@ -6,7 +6,7 @@ public class FileService {
     private final String mainBoardPath= "D:/git/SudokuApp/src/gameBoard.txt";
     private final String compareBoardPath= "D:/git/SudokuApp/src/boardToCompare.txt";
     private final String boardToReload= "D:/git/SudokuApp/src/boardToReload.txt";
-    private final String otherDataPath = "D:/git/SudokuApp/src/otherDate.txt";
+    private final String otherDataPath = "D:/git/SudokuApp/src/otherData.txt";
     public String getMainBoardPath() {
         return this.mainBoardPath;
     }
@@ -26,13 +26,15 @@ public class FileService {
             }
             writer.close();
         } catch (IOException e) {
-            System.out.println("Error");
+            System.out.println("Error : " + e.getMessage());
         }
+
+
     }
     public void saveWrongAnswers(int wrongs){
         try {
             PrintWriter pw = new PrintWriter(otherDataPath);
-            pw.print(wrongs);
+            pw.print("Wrongs_" + wrongs + ("\n"));
             pw.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -42,11 +44,12 @@ public class FileService {
          int wrongs = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(otherDataPath))) {
-            String line = br.readLine(); 
-            wrongs = Integer.parseInt(String.valueOf(line));
+            String line = br.readLine();
+            String tmp = line.substring(7,8);
+            wrongs = Integer.parseInt(String.valueOf(tmp));
             
         } catch (IOException e) {
-            System.err.println("Błąd podczas odczytu pliku: " + e.getMessage());
+            System.err.println("Error : " + e.getMessage());
         }
         return wrongs;
     }

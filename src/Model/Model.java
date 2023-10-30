@@ -20,7 +20,6 @@ public class Model {
         this.wrongs = wrongs;
     }
     public void resetRedCrosses (int wrongs, JLabel[] redCrosses){
-        wrongs = 0;
         fileService.saveWrongAnswers(wrongs);
         for (int i = 0; i < 3; i++) {
             redCrosses[i].setVisible(false);
@@ -95,20 +94,6 @@ public class Model {
             field.removeKeyListener(listener);
         }
     }
-
-//    public int[][] newArray(int[][] reloadNet) {
-//        int[][] tempArray = new int[9][9];
-//        for (int i = 0; i < 9; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                if (reloadNet[i][j] == 0) {
-//                    tempArray[i][j] = 1;
-//                } else {
-//                    tempArray[i][j] = 0;
-//                }
-//            }
-//        }
-//        return tempArray;
-//    }
     public void cleanBoards(int[][] sudokuNet, int[][] reloadNet, int[][] compareNet) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
